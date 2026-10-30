@@ -1076,7 +1076,7 @@ const KEY='aulaolimpiadas.v1';
 const reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const defS=()=>({v:1,screen:'cover',cfg:{n:0,mat:'full',mode:'express',sel:'auto',pace:1},teams:[],plan:[],cur:0,res:{},adj:{},tally:{},usedQ:[],play:null,editing:null,started:false});
-let S=defS(), UI={sound:true,anim:!reduced,font:1};
+let S=defS(), UI={sound:true,anim:!reduced,font:1,music:true,vol:.3,track:-1};
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function saveUI(){try{localStorage.setItem(KEY+'.ui',JSON.stringify(UI))}catch(e){}}
 function load(){
@@ -1181,7 +1181,7 @@ function renderHdr(){
  const inComp=S.plan.length&&COMP.includes(S.screen);
  $('#hdr').innerHTML=`<button class="brand disp" data-a="home" aria-label="Ir a la portada">${logoIcon(36)}<span>AulaOlimpiadas</span></button>`+
  (inComp?`<div class="prog"><span class="small">Prueba ${Math.min(S.cur+1,S.plan.length)} de ${S.plan.length}</span>${progressDots()}<div class="bar"><i style="width:${doneCount()/S.plan.length*100}%"></i></div></div>`:'<div class="prog"></div>')+
- `<div class="tools">${inComp?`<button class="ib" data-a="stModal" title="Clasificación y medallero" aria-label="Clasificación">🏆</button><button class="ib" data-a="planModal" title="Plan de la competición" aria-label="Plan">📋</button><button class="ib" data-a="matModal" title="Materiales" aria-label="Materiales">🎒</button>`:''}<button class="ib" data-a="snd" title="Sonido" aria-label="Sonido">${UI.sound?'🔊':'🔇'}</button><button class="ib" data-a="settings" title="Ajustes" aria-label="Ajustes">⚙️</button><button class="ib" data-a="fs" title="Pantalla completa" aria-label="Pantalla completa">⛶</button></div>`;
+ `<div class="tools">${inComp?`<button class="ib" data-a="stModal" title="Clasificación y medallero" aria-label="Clasificación">🏆</button><button class="ib" data-a="planModal" title="Plan de la competición" aria-label="Plan">📋</button><button class="ib" data-a="matModal" title="Materiales" aria-label="Materiales">🎒</button>`:''}${UI.music&&typeof musOK==='function'&&!musOK()?'<button class="btn sm" data-a="musKick">🎵 Toca aquí para activar la música</button>':''}<button class="ib" data-a="musT" title="Música" aria-label="Música">${UI.music?'🎵':'🔕'}</button><button class="ib" data-a="snd" title="Efectos de sonido" aria-label="Efectos de sonido">${UI.sound?'🔊':'🔇'}</button><button class="ib" data-a="settings" title="Ajustes" aria-label="Ajustes">⚙️</button><button class="ib" data-a="fs" title="Pantalla completa" aria-label="Pantalla completa">⛶</button></div>`;
 }
 function renderFtr(){
  const full=S.screen==='cover';
@@ -1204,7 +1204,7 @@ function render(){
  $('#main').innerHTML=SCR[S.screen]();
  renderHdr();renderFtr();
  if(AFTER[S.screen])AFTER[S.screen]();
- applyAnimState();fit();
+ applyAnimState();fit();if(typeof bgAuto==='function')bgAuto();
 }
 
 document.addEventListener('click',e=>{
@@ -1235,6 +1235,9 @@ ACT.credits=()=>modal(`<h2>Créditos y licencia</h2><div class="row"><div>${masc
 ACT.settings=()=>modal(`<h2>⚙️ Configuración</h2>
  <div class="grid g2"><button class="opt ${UI.sound?'sel':''}" data-a="setSnd"><h3>🔊 Sonido</h3><p>${UI.sound?'Activado':'Desactivado'} · avisos, cuenta atrás y fanfarria</p></button>
  <button class="opt ${UI.anim?'sel':''}" data-a="setAnim"><h3>✨ Animaciones</h3><p>${UI.anim?'Activadas':'Desactivadas'} · confeti y movimiento</p></button></div>
+ <h3 style="margin-top:1rem">🎵 Música de fondo</h3>
+ <div class="grid g2"><button class="opt ${UI.music?'sel':''}" data-a="musT"><h3>🎵 Música</h3><p>${UI.music?'Activada':'Desactivada'} · ${UI.track>=0?'Pista fija':'Automática según el momento del juego'}</p></button><div class="card"><b>Volumen</b><input type="range" min="0" max="100" value="${Math.round(UI.vol*100)}" data-i="musVol" aria-label="Volumen de la música" style="width:100%;margin-top:.6rem"></div></div>
+ <div class="row" style="margin-top:.5rem"><button class="btn sm ${UI.track<0?'pri':''}" data-a="musTrack" data-v="-1">🔀 Automática</button>${TRACKS.map((t,i)=>`<button class="btn sm ${UI.track===i?'pri':''}" data-a="musTrack" data-v="${i}">${t.e} ${t.n}</button>`).join('')}</div>
  <h3 style="margin-top:1rem">🔠 Tamaño de letra</h3><div class="row">${[[.9,'Pequeño'],[1,'Normal'],[1.15,'Grande'],[1.3,'Muy grande']].map(([v,l])=>`<button class="btn sm ${UI.font===v?'pri':''}" data-a="setFont" data-v="${v}">${l}</button>`).join('')}</div>
  <h3 style="margin-top:1rem">⌨️ Atajos</h3><p class="small">Espacio = iniciar/pausar · → continuar · ← volver · F = pantalla completa · Esc = cerrar ventana</p>
  <div class="row" style="margin-top:1rem"><button class="btn dan sm" data-a="newComp">🗑️ Nueva competición (borrar resultados)</button><div class="sp"></div><button class="btn pri" data-a="close">Listo</button></div>`);
@@ -1398,6 +1401,69 @@ AFTER.presenta=()=>{SFX.reveal();$$('[data-pres]').forEach(el=>{const i=+el.data
 ACT.plan_back2=()=>go('plan');
 ACT.goIntro=()=>{openIntro(S.cur)};
 function openIntro(i){S.cur=i;S.play=null;S._last='intro';go('intro')}
+
+/* ============ MÚSICA DE FONDO (generada en el navegador, sin archivos) ============ */
+const R_=-99;
+const TRACKS=[
+ {n:'Fiesta en el patio',e:'🎉',bpm:124,root:261.63,sc:[0,2,4,7,9],lw:'triangle',lv:.16,ld:1.6,bw:'sine',bv:.3,
+  lead:[4,R_,5,R_,6,R_,5,4,3,R_,4,R_,5,R_,3,R_,4,R_,5,R_,6,R_,7,6,5,R_,3,R_,4,R_,R_,R_],bass:[0,R_,0,R_,0,R_,0,R_,3,R_,3,R_,4,R_,4,R_],k:[0,4,8,12],h:[2,6,10,14],s:[4,12]},
+ {n:'Ritmo canario',e:'🪘',bpm:112,root:220,sc:[0,2,3,5,7,8,10],lw:'triangle',lv:.2,ld:.9,bw:'sine',bv:.32,
+  lead:[0,R_,2,R_,4,R_,2,0,R_,2,R_,4,R_,6,R_,4,3,R_,2,R_,0,R_,R_,2,4,R_,R_,R_,2,R_,0,R_],bass:[0,R_,R_,0,R_,0,R_,R_,3,R_,R_,3,R_,3,R_,R_],k:[0,6,8,14],h:[2,4,10,12],s:[4,12]},
+ {n:'Aventura volcánica',e:'🌋',bpm:138,root:164.81,sc:[0,2,3,5,7,8,10],lw:'sawtooth',lv:.09,ld:1.1,bw:'triangle',bv:.3,
+  lead:[0,2,4,7,4,2,0,2,0,2,4,7,9,7,4,2,3,5,7,10,7,5,3,5,4,R_,7,R_,9,R_,11,R_],bass:[0,0,0,0,0,0,0,0,-2,-2,-2,-2,-1,-1,-1,-1],k:[0,4,8,12],h:[2,6,10,14,15],s:[4,12]},
+ {n:'Calma atlántica',e:'🌊',bpm:70,root:293.66,sc:[0,2,4,5,7,9,11],lw:'sine',lv:.2,ld:7,bw:'sine',bv:.25,pad:[[0,2,4],[3,5,7]],
+  lead:[4,R_,R_,R_,R_,R_,R_,R_,2,R_,R_,R_,R_,R_,R_,R_,3,R_,R_,R_,R_,R_,R_,R_,1,R_,R_,R_,R_,R_,R_,R_],bass:[0,R_,R_,R_,R_,R_,R_,R_,R_,R_,R_,R_,R_,R_,R_,R_],k:[],h:[],s:[]},
+ {n:'Gran final',e:'🔥',bpm:150,root:196,sc:[0,2,3,5,7,8,11],lw:'sawtooth',lv:.08,ld:.9,bw:'triangle',bv:.32,
+  lead:[0,2,4,2,0,2,4,7,0,2,4,2,0,2,4,7,3,5,7,5,3,5,7,10,2,4,6,4,2,4,6,9],bass:[0,R_,0,R_,0,R_,0,R_,3,R_,3,R_,4,R_,4,R_],k:[0,4,8,12,14],h:[2,6,10,14],s:[4,12,14,15]}
+];
+const BG={iv:null,idx:-1,step:0,next:0,gain:null,hold:false,noise:null};
+function actx(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}catch(e){return null}}
+const dfreq=(T,d)=>{const n=T.sc.length,i=((d%n)+n)%n,o=Math.floor(d/n);return T.root*Math.pow(2,(T.sc[i]+12*o)/12)};
+function bgNote(f,t,d,type,v){const a=AC,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(BG.gain);o.start(t);o.stop(t+d+.05)}
+function bgNoise(t,d,v,hp,bp){const a=AC;if(!BG.noise){const b=a.createBuffer(1,a.sampleRate*.5,a.sampleRate),c=b.getChannelData(0);for(let i=0;i<c.length;i++)c[i]=Math.random()*2-1;BG.noise=b}
+ const s=a.createBufferSource();s.buffer=BG.noise;const f=a.createBiquadFilter();f.type=bp?'bandpass':'highpass';f.frequency.value=bp||hp;const g=a.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(BG.gain);s.start(t);s.stop(t+d+.02)}
+function bgStep(T,st,t,sd){
+ const l=T.lead[st];if(l!==undefined&&l!==R_)bgNote(dfreq(T,l),t,sd*T.ld,T.lw,T.lv);
+ const s16=st%16;
+ if(T.pad&&s16===0){T.pad[Math.floor(st/16)%T.pad.length].forEach(d=>bgNote(dfreq(T,d),t,sd*15,'sine',.07))}
+ const b=T.bass[s16];if(b!==undefined&&b!==R_)bgNote(dfreq(T,b)/4,t,sd*(T.pad?14:1.8),T.bw,T.bv);
+ if(T.k.includes(s16)){const a=AC,o=a.createOscillator(),g=a.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.6,t);g.gain.exponentialRampToValueAtTime(.0001,t+.16);o.connect(g);g.connect(BG.gain);o.start(t);o.stop(t+.2)}
+ if(T.h.includes(s16))bgNoise(t,.04,.09,7000);
+ if(T.s.includes(s16))bgNoise(t,.12,.22,0,1800);
+}
+function bgSched(){const a=AC,T=TRACKS[BG.idx];if(!a||!T)return;const sd=60/T.bpm/4;while(BG.next<a.currentTime+.3){bgStep(T,BG.step,BG.next,sd);BG.next+=sd;BG.step=(BG.step+1)%32}}
+function bgVol(){return BG.gain?(UI.vol*(BG.duck||1)):0}
+function bgStop(){
+ clearInterval(BG.iv);BG.iv=null;const g=BG.gain;BG.idx=-1;
+ if(g&&AC){try{g.gain.setTargetAtTime(0,AC.currentTime,.08)}catch(e){}setTimeout(()=>{try{g.disconnect()}catch(e){}},500)}
+ BG.gain=null;
+}
+function bgStart(i){
+ if(!UI.music||BG.hold)return;const a=actx();if(!a)return;
+ if(BG.idx===i&&BG.iv)return;
+ bgStop();BG.idx=i;BG.step=0;BG.next=a.currentTime+.1;
+ BG.gain=a.createGain();BG.gain.gain.value=0;BG.gain.connect(a.destination);
+ BG.gain.gain.setTargetAtTime(UI.vol*(BG.duck||1),a.currentTime,.4);
+ BG.iv=setInterval(bgSched,40);
+}
+function bgAuto(){
+ if(!UI.music||BG.hold||document.hidden)return;
+ const sc=S.screen;let i=0,duck=1;
+ if(UI.track>=0)i=UI.track;
+ else if(sc==='intro'||sc==='play'){const c=S.plan[S.cur]&&CHB[S.plan[S.cur].id];i=c&&c.fin?4:[1,2,0][S.cur%3];if(sc==='play')duck=.55}
+ else if(sc==='rank'||sc==='standings')i=3;
+ else if(sc==='ceremony'||sc==='summary')i=0;
+ BG.duck=(UI.track>=0&&sc==='play')?.55:duck;
+ if(BG.idx!==i||!BG.iv)bgStart(i);else if(BG.gain&&AC)BG.gain.gain.setTargetAtTime(UI.vol*BG.duck,AC.currentTime,.3);
+}
+function bgHold(v){BG.hold=v;if(v)bgStop();else bgAuto()}
+ACT.musKick=()=>{bgAuto();renderHdr()};
+ACT.musT=()=>{UI.music=!UI.music;saveUI();if(UI.music){bgAuto()}else bgStop();renderHdr();if(MODAL&&MODAL.textContent.includes('Música de fondo'))ACT.settings()};
+ACT.musTrack=v=>{UI.track=+v;saveUI();bgStop();bgAuto();ACT.settings()};
+INP.musVol=v=>{UI.vol=+v/100;saveUI();if(BG.gain&&AC)BG.gain.gain.setTargetAtTime(UI.vol*(BG.duck||1),AC.currentTime,.05)};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)bgStop();else bgAuto()});
+const musOK=()=>!!(BG.iv&&AC&&AC.state==='running');
+['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev,()=>{if(UI.music&&!musOK()&&!BG.hold){actx();bgAuto();setTimeout(()=>{if(AC)AC.onstatechange=()=>renderHdr();renderHdr()},350)}},{capture:true}));
 
 /* ============ PRESENTACIÓN DE CADA RETO ============ */
 const curC=()=>CHB[S.plan[S.cur].id];
@@ -1795,7 +1861,7 @@ TL.rounds={
   S.rt=S.rt||{};const done=S.rt[S.cur]||{};
   TS.o=o;TS.nt=o.secs===0;TS.secs=TS.nt?0:(o.secs||60);TS.order=S.teams.map(t=>t.k);TS.i=Math.max(0,TS.order.findIndex(k=>!done[k]));
   TS.st=TS.order.every(k=>done[k])?'done':'idle';TS.log={};TS.el=0;TS.last=null;
-  TS.stop=()=>{clearInterval(TS.iv);musStop();clearTimeout(TS.cdt)};TS.onEnd=null;
+  TS.stop=()=>{clearInterval(TS.iv);musStop();clearTimeout(TS.cdt);if(BG.hold)bgHold(false)};TS.onEnd=null;
  },
  draw(c,o){
   const k=TS.order[TS.i],T=TEAMBY[k],done=(S.rt&&S.rt[S.cur])||{},tal=S.tally[S.cur]||{},lg=TS.log[k]||[],ts=lg.reduce((a,x)=>a+x[1],0);
@@ -1844,7 +1910,8 @@ function rtPlan(){ // calcula las estatuas del turno
 }
 function rtNewCmd(){const L=LISTS[TS.o.list];let i;do{i=rnd(L.length)}while(L.length>1&&i===TS.lastI);TS.lastI=i;TS.cur=L[i];TS.n=(TS.n||0)+1;const k=TS.cur[2];k==='x'?SFX.bad():tone(440+(i%6)*80,.18,'triangle',.22);}
 ACT.rtStart=()=>{
- if(TS.st!=='idle')return;const o=TS.o;if(TS.nt){TS.st='run';TS.el=0;drawTool();SFX.go();return}TS.el=0;TS.last=null;TS.n=0;TS.f=1;TS.ph='music';TS.fr=null;TS.cur=null;TS.nextAt=0;TS.hid=!!o.hide;TS.card=null;
+ if(TS.st!=='idle')return;const o=TS.o;if(TS.nt){TS.st='run';TS.el=0;drawTool();SFX.go();return}
+ if(o.mode==='statue')bgHold(true);TS.el=0;TS.last=null;TS.n=0;TS.f=1;TS.ph='music';TS.fr=null;TS.cur=null;TS.nextAt=0;TS.hid=!!o.hide;TS.card=null;
  if(o.mode==='statue')rtPlan();
  if(o.mode==='cards'){TS.bag=shuffle(DECKS[o.deck].map((_,i)=>i));TS.card=DECKS[o.deck][TS.bag.pop()]}
  TS.st='cd';cdown(3,false,()=>{TS.st='run';TS.last=Date.now();if(o.mode==='statue')musStart();if(o.mode==='cmd'){rtNewCmd();TS.nextAt=(o.auto||4)}clearInterval(TS.iv);TS.iv=setInterval(rtTick,200);drawTool()});
@@ -1862,7 +1929,7 @@ function rtTick(){
  if(TS.el>=TS.secs)rtFinish();
 }
 function rtFinish(){
- clearInterval(TS.iv);musStop();TS.st='done';SFX.end();S.rt=S.rt||{};(S.rt[S.cur]=S.rt[S.cur]||{})[TS.order[TS.i]]=true;save();renderTally();drawTool();
+ clearInterval(TS.iv);musStop();TS.st='done';SFX.end();if(BG.hold)bgHold(false);S.rt=S.rt||{};(S.rt[S.cur]=S.rt[S.cur]||{})[TS.order[TS.i]]=true;save();renderTally();drawTool();
 }
 ACT.rtEnd=()=>{if(TS.st==='run'||TS.st==='pause')rtFinish()};
 ACT.rtMain=()=>{

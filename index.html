@@ -1098,7 +1098,7 @@ function autoPick(k,exclude=[]){
  for(const c of pool){if(out.length>=k)break;if(!out.includes(c))out.push(c)}
  return out;
 }
-function mkPlan(ids){S.plan=ids.map(id=>({id,t:defT(CHB[id])}));S.cur=0;S.res={};S.adj={};S.tally={};S.usedQ=[];S.play=null;S.editing=null;S.started=false}
+function mkPlan(ids){S.plan=ids.map(id=>({id,t:defT(CHB[id])}));S.cur=0;S.res={};S.adj={};S.tally={};S.rt={};S.qz={};S.tlog={};S.usedQ=[];S.play=null;S.editing=null;S.started=false}
 
 /* ---------- puntuación ---------- */
 function totals(){
@@ -1390,7 +1390,7 @@ ACT.pChange=v=>{
  modal(`<h2>🔀 Cambiar “${esc(cur.n)}”</h2><div class="grid g3">${L.map(c=>`<button class="chal" style="--cc:${CATS[c.cat][2]}" data-a="pDo" data-v="${i}:${c.id}"><span class="ic">${c.ic}</span><div><b>${esc(c.n)}</b><small>${CATS[c.cat][0]} · ${fmt(c.t)}</small></div></button>`).join('')}</div><div class="row" style="margin-top:.8rem"><button class="btn" data-a="pRand" data-v="${i}">🎲 Uno al azar</button><button class="btn pri" data-a="close">Cancelar</button></div>`,true);
 };
 ACT.pRand=v=>{const i=+v,cur=CHB[S.plan[i].id];const L=(cur.fin?poolF():poolN()).filter(c=>!S.plan.some(p=>p.id===c.id));if(L.length)ACT.pDo(i+':'+L[rnd(L.length)].id);else toast('No quedan más retos para cambiar.')};
-ACT.pDo=v=>{const [i,id]=v.split(':');S.plan[i]={id,t:defT(CHB[id])};delete S.tally[i];save();closeModal();S.screen==='plan'?keepScroll():render()};
+ACT.pDo=v=>{const [i,id]=v.split(':');S.plan[i]={id,t:defT(CHB[id])};delete S.tally[i];if(S.rt)delete S.rt[i];if(S.qz)delete S.qz[i];if(S.tlog)delete S.tlog[i];save();closeModal();S.screen==='plan'?keepScroll():render()};
 ACT.beginComp=()=>{S.started=true;S.cur=0;save();go('presenta')};
 
 /* ============ PRESENTACIÓN DE EQUIPOS ============ */

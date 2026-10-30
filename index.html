@@ -943,6 +943,13 @@ SEQP.forEach(([id,pool,tml,len,w,what])=>{const c=CH.find(x=>x.id===id);c.tm='rt
  c.p=id==='zfMemoria'?'Cada ronda superada suma 1 punto y a partir de 5 movimientos, 2. Gana el equipo con más puntos.':'Gana el equipo con más puntos entre todos sus turnos.';
  c.tool={k:'rounds',mode:'seq',pool,len,secs:0,pos:id==='zfMemoria'?[['Ronda superada',1],['Ronda larga (5 o más)',2]]:[[w+' perfecto',2],[w+' con un fallo',1]],neg:[]};c.incs=[1,2]});
 
+/* ---- Pong de Vasos con bote ---- */
+CH.push(Object.assign({m:'f',mat:[],incs:[1],v:''},{id:'pongbote',n:'Pong de Vasos con Bote',cat:'A',ic:'🏓',t:120,mat:['vaso','pelota','mesa'],an:'bounce',tm:'no',att:'2 lanzamientos',
+ w:'Como el pong de vasos, pero la pelota tiene que botar en la mesa antes de entrar en el vaso.',
+ h:['Coloca 6 vasos vacíos en triángulo (3-2-1) en el extremo de la mesa.','Por turnos, cada jugador lanza 2 pelotas: la pelota debe dar UN bote en la mesa antes de caer dentro de un vaso.','Si entra tras un bote vale 2 puntos (3 si es el vaso de la punta). Si entra sin botar o bota dos veces, no vale.'],
+ p:'Gana el equipo con más puntos cuando han lanzado todos los jugadores.',e:'Acerca la línea de lanzamiento o usa vasos grandes.',a:'Lanzar desde sentado o con la mano que prefiera.',s:'Sin líquidos ni vidrio. Pelotas muy ligeras. Mesa despejada.',v:'Variantes: dos botes (vale 4), lanzar con la mano no dominante.',
+ tool:{k:'rounds',mode:'plain',secs:0,pos:[['Entra tras un bote',2],['Vaso de la punta tras un bote',3]],neg:[['Trampa o fallo de regla',-1]]}}));
+
 /* ============ MÁS PREGUNTAS DE TRIVIAL DEPORTIVO ============ */
 QS.push(
 ['¿Cuántos puntos vale un tiro libre en baloncesto?','1','2','3','0',1,'Reglas'],
@@ -1164,6 +1171,7 @@ const AN={
  dots:()=>[['#ff5a5f',50],['#ffd23f',100],['#34e07f',150],['#19d3ff',200]].map(([c,x],i)=>`<circle cx="${x-10}" cy="70" r="20" fill="${c}" opacity=".35"/><circle cx="${x-10}" cy="70" r="20" fill="${c}"><animate attributeName="opacity" values="0;1;0;0" keyTimes="0;.08;.2;1" dur="4s" begin="${i*.5}s" repeatCount="indefinite"/></circle>`).join('')+T(120,122,13,'🔴 → 🟡 → 🟢 → 🔵',Y),
  moves:()=>gnd()+fig(50,66,Y,{la:[20,160],ra:[20,160],d:1.2})+fig(120,66,B,{ll:[10,45],rl:[10,45],la:[60,60],ra:[60,60],dy:6,d:1.2})+fig(190,66,P,{la:[80,10],ra:[10,80],ll:[8,8],rl:[8,8],d:.8}),
  quiz:()=>T(120,70,70,'?',Y)+[['A',30],['B',90],['C',150],['D',210]].map(([l,x],i)=>`<rect x="${x-24}" y="92" width="48" height="26" rx="8" fill="${[ '#ff5a5f',B,G,O][i]}"><animate attributeName="opacity" values=".5;1;.5" dur="2s" begin="${i*.3}s" repeatCount="indefinite"/></rect>${T(x,111,16,l)}`).join(''),
+ bounce:()=>gnd()+tbl(10,100,220)+[0,1,2].map(i=>cup(196+(i-1)*0,100-(i>0?i*0:0),18,20,[ '#ff5a5f',Y,B][i]).slice(0,0)).join('')+cup(172,100,20,22,'#ff5a5f')+cup(196,100,20,22,Y)+cup(220,100,20,22,B)+cup(184,78,20,22,G)+cup(208,78,20,22,P)+cup(196,56,20,22,O)+fig(34,66,P,{ra:[20,120],d:2.2})+mot('M60,60 Q80,60 96,94 Q122,40 150,70 Q172,60 188,80',2.2,ball(6,'#34e07f'),'calcMode="linear"')+T(100,120,12,'¡bote!',Y),
  target:()=>gnd()+`<rect x="150" y="10" width="80" height="100" rx="6" fill="#8a5a2b"/><circle cx="190" cy="58" r="38" fill="#fff"/><circle cx="190" cy="58" r="29" fill="#ff4d6d"/><circle cx="190" cy="58" r="20" fill="#fff"/><circle cx="190" cy="58" r="11" fill="#ffd23f"/><text x="190" y="63" text-anchor="middle" font-size="13" font-weight="900" font-family="Arial" fill="#111">5</text>`+fig(40,70,B,{ra:[20,160],d:2})+mot('M62,58 L184,60',2,ball(6,'#34e07f'),'keyPoints="0;1;1" keyTimes="0;.5;1" calcMode="linear"')+`<circle cx="184" cy="60" r="6" fill="#34e07f" stroke="#fff" stroke-width="1.5"><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;.5;.55;1" dur="2s" repeatCount="indefinite"/></circle>`,
  count:()=>['3','BIZZ','4','BUZZ','6'].map((t,i)=>`<g>${blink('0;1;1;0;0',5,i*1)}${T(120,84,t.length>2?50:70,t,i==1?'#ff5a5f':i==3?G:'#fff')}</g>`).join('').replace(/values="0;1;1;0;0"/g,'values="0;1;1;0;0" keyTimes="0;.05;.18;.2;1"'),
  talk:()=>gnd()+fig(60,70,B,{ra:[15,100],d:1.1})+`<rect x="100" y="20" width="120" height="52" rx="14" fill="#fff"/><path d="M104 60 l-14 14 22 -6Z" fill="#fff"/>${T(160,44,16,'Es un deporte…','#0b1033')}${T(160,64,14,'🚫 gol 🚫 red','#e11d48')}`,

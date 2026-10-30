@@ -923,6 +923,146 @@ const TURN={basket:[['Encesta cerca',1],['Encesta media',2],['Encesta lejos',3]]
  domino:[['Pieza caída',1],['Fila completa',3]],soplo:[['Bola al medio',1],['Portería',2]]};
 for(const id in TURN){const c=CH.find(x=>x.id===id);c.tm='no';c.tool={k:'rounds',mode:'plain',secs:0,pos:TURN[id],neg:[NT]};c.incs=[1]}
 
+/* ---- Trivial de Educación Física ---- */
+CH.push(Object.assign({m:'f',mat:[],incs:[1],v:''},{id:'trivialef',n:'Trivial de Educación Física',cat:'D',ic:'📚',t:120,m:'b',an:'quiz',tm:'rt',tml:'3 preguntas por equipo · 1 min cada una',
+ w:'Preguntas sobre lo que aprendemos en Educación Física: vida activa, seguridad, habilidades, juegos, convivencia, cultura canaria y naturaleza.',
+ h:['Se hacen rondas: cada equipo responde una pregunta por turno (3 en total por equipo). El equipo en turno aparece en pantalla.','Tiene 1 minuto para pensar y elegir una de las 4 opciones pinchando en ella.','Si acierta, suma 1 punto para su equipo. Si falla o se acaba el tiempo, se enseña la respuesta y se comenta en clase.'],
+ p:'Gana el equipo con más aciertos (3 preguntas por equipo).',e:'Dar pistas o eliminar una opción.',a:'Responder con tarjetas A, B, C, D.',s:'Sin riesgo.',v:'Se pueden comentar las respuestas para repasar los contenidos.',
+ tool:{k:'quiz',secs:60,per:3,set:'ef'}}));
+
+/* ============ MÁS PREGUNTAS DE TRIVIAL DEPORTIVO ============ */
+QS.push(
+['¿Cuántos puntos vale un tiro libre en baloncesto?','1','2','3','0',1,'Reglas'],
+['¿Cuántos jugadores componen un equipo de fútbol sala en la pista?','5','4','6','7',2,'Deportes'],
+['¿Qué deporte se juega con un palo, una pelota pequeña y porterías sobre césped?','Hockey sobre hierba','Golf','Béisbol','Críquet',2,'Deportes'],
+['¿Cómo se llama la prueba de atletismo en la que se corre saltando obstáculos?','Vallas','Relevos','Maratón','Marcha',1,'Deportes'],
+['¿Cuántos kilómetros mide aproximadamente una maratón?','42','10','21','100',3,'Deportes'],
+['¿Qué estilo de natación se nada boca arriba?','Espalda','Crol','Braza','Mariposa',1,'Deportes'],
+['¿Qué deporte se practica sobre un tatami con kimono?','Judo','Tenis','Waterpolo','Hockey',1,'Deportes'],
+['¿Cómo se llama el aparato de gimnasia artística que es una barra estrecha elevada?','Barra de equilibrio','Potro','Anillas','Paralelas',2,'Deportes'],
+['¿Qué deporte se juega con una raqueta pequeña y una pelota blanca sobre una mesa?','Tenis de mesa','Tenis','Bádminton','Squash',1,'Deportes'],
+['¿Cuál de estas pruebas de atletismo es un salto?','Salto de longitud','Lanzamiento de peso','100 metros lisos','Maratón',1,'Deportes'],
+['¿Cuántos jugadores hay en cada equipo en voleibol de playa?','2','3','4','6',3,'Deportes'],
+['¿Qué color de tarjeta expulsa a un jugador en fútbol?','Roja','Amarilla','Azul','Verde',1,'Reglas'],
+['¿Cuántos minutos dura un partido de fútbol (sin añadidos)?','90','60','45','120',1,'Reglas'],
+['¿Qué deporte con tabla se estrenó en los Juegos Olímpicos de Tokio 2020?','Surf','Ajedrez','Polo','Golf',2,'Olimpismo'],
+['¿Qué ciudad organizó los Juegos Olímpicos de 2016?','Río de Janeiro','Londres','Pekín','Tokio',3,'Olimpismo'],
+['¿Cada cuántos años se juega el Mundial de fútbol?','4','2','3','5',1,'Deportes'],
+['¿Qué se enciende en la ceremonia de apertura de los Juegos Olímpicos?','La llama olímpica','Una hoguera','Un faro','Un volcán',1,'Olimpismo'],
+['¿Qué deporte olímpico incluye saltos desde un trampolín al agua?','Saltos de trampolín','Esgrima','Boxeo','Tiro con arco',1,'Olimpismo'],
+['¿Cuál es el lema olímpico?','Más rápido, más alto, más fuerte','Ganar siempre, ganar todo','Corre, salta, lanza','Primero, segundo, tercero',3,'Olimpismo'],
+['¿Con qué órgano pensamos y controlamos los movimientos?','El cerebro','El estómago','El hígado','El riñón',1,'Cuerpo'],
+['¿Qué parte del esqueleto protege el corazón y los pulmones?','Las costillas','La pelvis','El fémur','El cráneo',1,'Cuerpo'],
+['¿Cómo se llaman los "cordones" que unen los músculos con los huesos?','Tendones','Venas','Nervios','Cartílagos',3,'Cuerpo'],
+['¿Qué músculos están en la parte de atrás del muslo?','Isquiotibiales','Cuádriceps','Bíceps','Deltoides',3,'Cuerpo'],
+['¿Qué mineral, presente en la leche, ayuda a tener huesos fuertes?','Calcio','Hierro','Sodio','Cobre',2,'Salud'],
+['¿Qué vitamina ayuda a fortalecer los huesos y se consigue con el sol?','Vitamina D','Vitamina A','Vitamina K','Vitamina B12',3,'Salud'],
+['¿Cuántas comidas al día se recomienda hacer?','5','2','3','8',2,'Salud'],
+['¿Cuánto tiempo conviene tardar en lavarse bien las manos?','20 segundos','2 segundos','5 segundos','1 minuto',2,'Salud'],
+['¿Qué protección debemos llevar siempre al ir en bici o en patinete?','El casco','Unas gafas de sol','Una gorra','Un abrigo',1,'Salud'],
+['¿Cómo debe ser el calzado para hacer deporte?','Cómodo y bien atado','Con tacón','Unas chancletas','Muy grande y suelto',1,'Salud'],
+['¿Qué músculos se estiran al tocarse los pies con las piernas rectas?','Los de detrás del muslo','Los de la cara','Los del brazo','Los abdominales',3,'Cuerpo'],
+['¿Cuál es la isla más grande del archipiélago canario?','Tenerife','Gran Canaria','Fuerteventura','Lanzarote',1,'Canarias'],
+['¿Qué isla canaria es conocida como "la isla bonita"?','La Palma','El Hierro','La Gomera','Lanzarote',2,'Canarias'],
+['¿Cómo se llama el árbol de El Hierro que recogía agua de la niebla?','El Garoé','El drago','El pino canario','La palmera',2,'Canarias'],
+['¿Qué árbol canario tiene una savia roja llamada "sangre de drago"?','El drago','El pino canario','El laurel','La palmera',2,'Canarias'],
+['¿En qué isla está el Parque Nacional de Timanfaya?','Lanzarote','Fuerteventura','La Palma','La Gomera',2,'Canarias'],
+['¿En qué isla está el Roque Nublo?','Gran Canaria','Tenerife','La Gomera','El Hierro',2,'Canarias'],
+['¿Qué isla tiene el bosque de laurisilva del Parque Nacional de Garajonay?','La Gomera','Lanzarote','Fuerteventura','Gran Canaria',2,'Canarias'],
+['¿Cómo se llama el círculo de arena donde se practica la lucha canaria?','El terrero','La pista','El ring','El tatami',3,'Canarias'],
+['¿Cómo se llama la pelota pequeña que se lanza primero en la bola canaria?','El mingue','La diana','El boliche','El tejo',3,'Canarias'],
+['¿Qué es un "empate"?','Cuando dos equipos tienen los mismos puntos','Cuando gana un equipo','Cuando se suspende el partido','Cuando se cambia de campo',1,'Reglas'],
+['¿Qué hace una persona que arbitra?','Vigila que se cumplan las reglas','Juega en un equipo','Vende las entradas','Entrena al equipo',1,'Reglas'],
+['¿Qué es el "saque" en voleibol?','Golpear el balón para iniciar la jugada','Hacer un cambio de jugador','Un descanso','Un tipo de red',2,'Reglas'],
+['¿Qué es un penalti en fútbol?','Un tiro a puerta tras una falta dentro del área','Un saque de esquina','Un fuera de juego','Un pase largo',2,'Reglas'],
+['¿Qué es un "mate" en baloncesto?','Meter el balón en la canasta desde arriba','Un pase de pecho','Un tiro libre','Un rebote',2,'Reglas'],
+['¿Cuántos pulmones tenemos?','2','1','3','4',1,'Cuerpo'],
+['¿Cuántas cavidades tiene el corazón?','4','2','3','6',3,'Cuerpo'],
+['¿Con qué parte del cuerpo notamos el equilibrio?','El oído','Los ojos','La nariz','La lengua',3,'Cuerpo'],
+['¿Qué músculo separa el pecho del abdomen y ayuda a respirar?','El diafragma','El bíceps','El glúteo','El gemelo',3,'Cuerpo'],
+['¿Cuál de estas actividades trabaja la resistencia?','Correr suave durante mucho tiempo','Lanzar una pelota una vez','Hacer un salto largo','Aguantar la respiración',1,'Capacidades'],
+['¿Cuál de estos ejercicios trabaja la fuerza?','Hacer flexiones','Estirarse','Correr muy suave','Respirar hondo',1,'Capacidades'],
+['¿Qué se trabaja al abrirse de piernas o tocarse los pies?','Flexibilidad','Fuerza','Velocidad','Puntería',1,'Capacidades'],
+['¿Con qué se juega al elástico?','Con una goma elástica larga','Con una pelota','Con un balón','Con una raqueta',1,'Juegos tradicionales'],
+['¿Cómo se llama el juego en el que se lanza un balón a los rivales para "quemarlos"?','Balón prisionero','Voleibol','Baloncesto','Golf',1,'Juegos tradicionales'],
+['¿Qué punto cardinal está donde sale el sol?','Este','Oeste','Norte','Sur',1,'Orientación'],
+['¿Qué punto cardinal es el opuesto al norte?','Sur','Este','Oeste','Centro',1,'Orientación']
+);
+
+/* ============ TRIVIAL DE EDUCACIÓN FÍSICA (contenidos básicos de Primaria) ============ */
+const QSEF=[
+['¿Qué parte de la sesión de Educación Física sirve para preparar el cuerpo?','El calentamiento','La vuelta a la calma','Los estiramientos finales','El recreo',1,'Vida activa'],
+['¿Qué parte sirve para recuperar poco a poco el ritmo del corazón?','La vuelta a la calma','El calentamiento','La parte principal','El juego final',1,'Vida activa'],
+['¿Cuál es el orden correcto de una sesión?','Calentamiento, parte principal y vuelta a la calma','Vuelta a la calma, parte principal y calentamiento','Parte principal, calentamiento y descanso','Solo parte principal',2,'Vida activa'],
+['¿Qué le pasa a la respiración cuando hacemos ejercicio?','Se hace más rápida','Se para','Se hace más lenta','No cambia',1,'Vida activa'],
+['¿Por qué sudamos al hacer ejercicio?','Para regular la temperatura del cuerpo','Porque estamos enfermos','Porque tenemos sed','Para perder agua sin motivo',1,'Vida activa'],
+['¿Qué debemos hacer al terminar la clase de Educación Física?','Asearnos y cambiarnos la camiseta','Irnos sin lavarnos','Beber un refresco','Dormir',1,'Vida activa'],
+['¿Cuál es una buena postura para sentarnos en clase?','Espalda recta y pies apoyados en el suelo','Muy encorvados','Tumbados sobre la mesa','Con las piernas colgando',1,'Vida activa'],
+['¿Cuál es un buen hábito con las pantallas?','Limitar el tiempo y hacer pausas activas','Usarlas toda la tarde','Usarlas en la cama','Jugar sin parar',1,'Vida activa'],
+['¿Para qué es importante dormir bien?','Para recuperar energía y rendir mejor','Para estar más cansado','Para no jugar','Para comer más',1,'Vida activa'],
+['¿Qué es mejor para almorzar en el recreo?','Fruta o un bocadillo','Bollería industrial','Chucherías','Un refresco',1,'Vida activa'],
+['¿Qué es el sedentarismo?','Pasar mucho tiempo sin moverse','Hacer deporte cada día','Dormir bien','Comer sano',1,'Vida activa'],
+['¿Cuál es un beneficio de hacer ejercicio con regularidad?','Fortalece el corazón, los huesos y los músculos','Hace que nos cansemos más','Quita el sueño siempre','No tiene beneficios',1,'Vida activa'],
+['¿Qué es la frecuencia cardíaca?','El número de latidos del corazón por minuto','El peso del corazón','La altura de una persona','La velocidad al correr',2,'Vida activa'],
+['¿Dónde podemos tomarnos el pulso?','En la muñeca o en el cuello','En la rodilla','En el pie','En la oreja',2,'Vida activa'],
+['¿Qué es una pausa activa?','Un breve descanso en el que nos movemos y estiramos','Dormir una siesta','Mirar el móvil','Comer algo',1,'Vida activa'],
+['¿Qué ropa es adecuada para hacer Educación Física?','Cómoda y transpirable','Muy ajustada','De abrigo grueso','Con botones y cremalleras duras',1,'Vida activa'],
+['¿Qué hacemos si sentimos un dolor fuerte durante el ejercicio?','Parar y avisar al profesor o profesora','Seguir con más fuerza','Esconderlo','Salir corriendo',1,'Seguridad'],
+['¿Qué es hidratarse?','Reponer el agua que perdemos al sudar','Mojarnos la ropa','Comer mucho','Dormir',1,'Vida activa'],
+['¿Cuánto debe durar aproximadamente un calentamiento?','Entre 5 y 10 minutos','Medio segundo','Una hora','Toda la sesión',2,'Vida activa'],
+['¿Qué ejercicios se hacen al final para relajar los músculos?','Estiramientos suaves','Sprints muy rápidos','Saltos a tope','Lanzamientos fuertes',1,'Vida activa'],
+['¿Qué hacemos antes de usar un material en Educación Física?','Comprobar que está en buen estado','Lanzarlo con fuerza','Esconderlo','Tirarlo al suelo',1,'Seguridad'],
+['¿Qué hacemos con el material al terminar la clase?','Recogerlo y dejarlo ordenado','Dejarlo tirado','Llevárnoslo a casa','Esconderlo',1,'Seguridad'],
+['¿Por qué no debemos correr por los pasillos?','Para evitar choques y caídas','Porque no se puede sudar','Porque cansa','Porque hay ruido',1,'Seguridad'],
+['¿Qué debemos quitarnos antes de hacer Educación Física?','Pulseras, anillos y colgantes','Los zapatos','La camiseta','La mochila solo',1,'Seguridad'],
+['¿Por qué atamos bien los cordones?','Para evitar tropiezos y caídas','Para que se vean bonitos','Para correr más lento','No hace falta atarlos',1,'Seguridad'],
+['¿Qué hacemos si un compañero se cae y se hace daño?','Ayudarle y avisar al profesor o profesora','Reírnos','Seguir jugando','Esconderlo',1,'Seguridad'],
+['¿Cuál de estas es una habilidad motriz básica de desplazamiento?','Reptar','Lanzar','Recepcionar','Botar',2,'Habilidades motrices'],
+['¿Qué habilidades trabajamos al lanzar y atrapar una pelota?','Lanzamientos y recepciones','Giros y saltos','Equilibrios','Reptaciones',1,'Habilidades motrices'],
+['¿Qué es el equilibrio?','Mantener el cuerpo estable sin caerse','Correr muy rápido','Saltar muy alto','Lanzar lejos',1,'Habilidades motrices'],
+['¿Qué es la coordinación?','Mover las partes del cuerpo juntas de forma ordenada','Correr deprisa','Ser muy fuerte','Ser muy alto',2,'Habilidades motrices'],
+['Si escribes con la mano izquierda, ¿cuál es tu lateralidad?','Zurda','Diestra','Ninguna','Es lo mismo',1,'Habilidades motrices'],
+['¿Qué es el ritmo?','El orden de los sonidos y los movimientos en el tiempo','La velocidad de un coche','La altura de un salto','El peso de un balón',2,'Habilidades motrices'],
+['¿Qué es el tronco?','La parte central del cuerpo, sin cabeza ni extremidades','Una pierna','La cabeza','Un brazo',1,'Habilidades motrices'],
+['¿Qué es un giro?','Rotar el cuerpo sobre su eje','Ir en línea recta','Saltar una valla','Tumbarse',2,'Habilidades motrices'],
+['¿Qué es una recepción?','Atrapar un objeto que nos llega','Lanzar un objeto','Esconder un objeto','Perder un objeto',1,'Habilidades motrices'],
+['¿Qué significa orientarse en el espacio?','Saber dónde estoy y hacia dónde voy','Quedarse quieto','Correr rápido','Cerrar los ojos',2,'Habilidades motrices'],
+['Si miras a un compañero de frente, ¿cómo están su derecha y tu izquierda?','Están en el mismo lado','Es lo mismo, no hay diferencia','Están al revés','No existen',3,'Habilidades motrices'],
+['¿Qué es un desplazamiento?','Moverse de un lugar a otro','Quedarse quieto','Un tipo de balón','Una regla',1,'Habilidades motrices'],
+['¿Qué es un salto?','Despegar del suelo con impulso','Arrastrarse','Mantenerse sentado','Rodar por el suelo',1,'Habilidades motrices'],
+['¿Qué es la coordinación óculo-manual?','Coordinar la vista con las manos, por ejemplo al atrapar','Mover solo los pies','Correr con los ojos cerrados','Mirar sin moverse',3,'Habilidades motrices'],
+['En un juego de cooperación-oposición, ¿qué hacemos?','Colaboramos con nuestro equipo y nos oponemos al rival','Jugamos solos','No hacemos nada','Ayudamos al rival',2,'Juegos y deportes'],
+['¿Qué es "desmarcarse"?','Moverse a un espacio libre para recibir el pase','Quitarse la camiseta','Salir del campo','Parar el balón con la mano',3,'Juegos y deportes'],
+['¿Qué es atacar en un juego de equipo?','Intentar conseguir puntos','Evitar jugar','Esconder el balón','Defender la portería',1,'Juegos y deportes'],
+['¿Qué es defender?','Evitar que el rival consiga puntos','Meter gol','Parar el juego','Cambiar de equipo',1,'Juegos y deportes'],
+['¿En qué deporte alternativo se golpea un balón gigante entre tres equipos?','Kin-ball','Pádel','Golf','Esgrima',3,'Juegos y deportes'],
+['¿Qué deporte alternativo se juega con un disco volador por equipos y sin contacto?','Ultimate','Rugby','Hockey','Judo',3,'Juegos y deportes'],
+['¿Qué se aprende con los juegos cooperativos?','A conseguir objetivos entre todos','A ganar a toda costa','A jugar solos','A no escuchar',1,'Juegos y deportes'],
+['¿Qué es el juego limpio?','Respetar las reglas y a las personas','Ganar a toda costa','Engañar al árbitro','Jugar sucio',1,'Convivencia'],
+['Si pierdes un partido, ¿qué es lo mejor que puedes hacer?','Felicitar al otro equipo y aceptar el resultado','Enfadarte y gritar','Romper el balón','Dejar de jugar',1,'Convivencia'],
+['¿Qué es la empatía?','Ponerse en el lugar de otra persona','Ganar siempre','Ser muy rápido','Hablar mucho',2,'Convivencia'],
+['Si un compañero no sabe hacer un ejercicio, ¿qué hacemos?','Animarle y ayudarle','Reírnos de él','Ignorarlo','Quitarle el material',1,'Convivencia'],
+['¿Qué hacemos cuando nos enfadamos durante un juego?','Respirar hondo y calmarnos','Gritar al compañero','Tirar el balón','Marcharnos sin avisar',1,'Convivencia'],
+['¿Por qué no debemos burlarnos de nadie en Educación Física?','Porque todos aprendemos a ritmos distintos y merecemos respeto','Porque da igual','Porque es divertido','Porque lo dice el árbitro',1,'Convivencia'],
+['¿Qué ayuda a que un equipo funcione bien?','Comunicarse y repartir los papeles','Cada uno juega por su cuenta','Gritar más fuerte','No escucharse',2,'Convivencia'],
+['¿Cómo debemos resolver un conflicto?','Hablando con respeto','Con un empujón','Con gritos','Con silencio y enfado',1,'Convivencia'],
+['¿Qué es la inclusión?','Que todas las personas puedan participar','Que solo jueguen los más fuertes','Que algunos se queden fuera','Que todos hagan lo mismo siempre',2,'Convivencia'],
+['¿Qué son los juegos tradicionales?','Juegos de siempre que pasan de generación en generación','Juegos que solo existen en el móvil','Juegos que se inventaron ayer','Juegos solo para mayores',1,'Cultura motriz'],
+['¿Qué es la expresión corporal?','Comunicar ideas y emociones con el cuerpo','Hablar muy alto','Escribir con el cuerpo','Correr deprisa',1,'Cultura motriz'],
+['¿Qué expresa el baile?','Emociones e ideas con el cuerpo y la música','Solo cansancio','Nada','Solo fuerza',1,'Cultura motriz'],
+['¿Cuál de estos es un deporte tradicional canario?','El salto del pastor','El curling','El sumo','El hockey sobre hielo',1,'Cultura motriz'],
+['¿Qué instrumento tradicional canario acompaña bailes como la isa y la folía?','El timple','El piano','La trompeta','La batería',2,'Cultura motriz'],
+['¿Qué es un deporte autóctono?','Un deporte propio de un lugar','Un deporte de otro planeta','Un deporte prohibido','Un deporte nuevo de moda',2,'Cultura motriz'],
+['¿Qué debemos hacer con la basura en una excursión?','Llevárnosla y reciclar','Tirarla al suelo','Enterrarla','Dejarla en el sendero',1,'Entorno'],
+['¿Qué es un sendero?','Un camino marcado para ir a pie por la naturaleza','Una autopista','Un tipo de balón','Una piscina',1,'Entorno'],
+['En una excursión por la naturaleza, ¿qué es imprescindible llevar?','Agua y protección solar','Un altavoz','Un balón de cristal','Muchos juguetes',1,'Entorno'],
+['¿Para qué sirve una brújula?','Para orientarnos, porque señala el norte','Para medir el tiempo','Para saltar más alto','Para escuchar música',1,'Entorno'],
+['¿Qué debemos respetar en el medio natural?','Las plantas, los animales y los senderos','Nada','Solo las piedras','Solo la basura',1,'Entorno'],
+['¿Cómo cruzamos una calle de forma segura?','Por el paso de peatones y mirando a ambos lados','Corriendo','Con los ojos cerrados','Por cualquier sitio',1,'Entorno'],
+['¿Qué podemos reutilizar para fabricar material deportivo?','Botellas, cartones y tapones','Cristales','Objetos punzantes','Aparatos eléctricos',1,'Entorno'],
+['¿Qué significa reciclar?','Convertir residuos en nuevos materiales','Tirar todo al mismo cubo','Quemar la basura','Comprar más cosas',2,'Entorno']
+];
+
 /* ============ ARTE SVG: ESCUDOS, LOGOS, MASCOTA, ANIMACIONES ============ */
 const SH='M50 4 L92 16 V52 C92 78 70 94 50 106 C30 94 8 78 8 52 V16 Z';
 function crest(k,sz=64){
@@ -1098,7 +1238,7 @@ function autoPick(k,exclude=[]){
  for(const c of pool){if(out.length>=k)break;if(!out.includes(c))out.push(c)}
  return out;
 }
-function mkPlan(ids){S.plan=ids.map(id=>({id,t:defT(CHB[id])}));S.cur=0;S.res={};S.adj={};S.tally={};S.rt={};S.qz={};S.tlog={};S.usedQ=[];S.play=null;S.editing=null;S.started=false}
+function mkPlan(ids){S.plan=ids.map(id=>({id,t:defT(CHB[id])}));S.cur=0;S.res={};S.adj={};S.tally={};S.rt={};S.qz={};S.tlog={};S.usedQ=[];S.usedQE=[];S.play=null;S.editing=null;S.started=false}
 
 /* ---------- puntuación ---------- */
 function totals(){
@@ -1306,7 +1446,7 @@ function bankList(){
  const L=CH.filter(c=>(BF.cat==='all'||c.cat===BF.cat)&&(!q||(c.n+' '+c.w).toLowerCase().includes(q)));
  return `<div class="grid g4">${L.map(c=>`<button class="chal" style="--cc:${CATS[c.cat][2]}" data-a="bankOpen" data-v="${c.id}"><span class="ic">${c.ic}</span><div><b>${esc(c.n)}</b><small>${c.m==='z'?'Zero material':c.m==='b'?'Con o sin material':'Con material'}${c.fin?' · FINAL':''} · ${fmt(c.t)}</small></div></button>`).join('')||'<p class="lead">No hay retos con ese filtro.</p>'}</div>`;
 }
-SCR.bank=()=>`<div class="scr"><div class="pageh"><button class="btn sm" data-a="home" data-back>← Portada</button><h1 class="disp">🎯 Banco de retos</h1><span class="lead">${CH.filter(c=>!c.fin).length} retos + ${CH.filter(c=>c.fin).length} finales · ${QS.length} preguntas de trivial</span></div>
+SCR.bank=()=>`<div class="scr"><div class="pageh"><button class="btn sm" data-a="home" data-back>← Portada</button><h1 class="disp">🎯 Banco de retos</h1><span class="lead">${CH.filter(c=>!c.fin).length} retos + ${CH.filter(c=>c.fin).length} finales · ${QS.length+QSEF.length} preguntas de trivial</span></div>
 <div class="row" style="margin-bottom:.7rem"><button class="btn sm ${BF.cat==='all'?'pri':''}" data-a="bankCat" data-v="all">Todos</button>${Object.entries(CATS).map(([k,v])=>`<button class="btn sm ${BF.cat===k?'pri':''}" data-a="bankCat" data-v="${k}">${v[1]} ${v[0]}</button>`).join('')}<input data-i="bankq" value="${esc(BF.q)}" placeholder="🔎 Buscar reto…" aria-label="Buscar reto" style="font-size:1.1rem;padding:.4rem .9rem;border-radius:2rem;border:2px solid var(--bd);background:rgba(0,0,0,.3);color:#fff"></div>
 <div id="bl">${bankList()}</div></div>`;
 ACT.bankCat=v=>{BF.cat=v;render()};
@@ -1659,12 +1799,12 @@ ACT.bzRes=()=>{TS.n=0;TS.dir=1;TS.turn=0;TS.rev=false;drawTool()};
 
 /* --- quiz: 3 preguntas por equipo, 1 minuto cada una --- */
 TL.quiz={
- init(c,o){S.qz=S.qz||{};const q=S.qz[S.cur]||{n:0,res:[]};TS.o=o;TS.order=S.teams.map(t=>t.k);TS.per=o.per||3;TS.total=TS.order.length*TS.per;TS.n=q.n;TS.res=q.res;TS.st='idle';TS.secs=o.secs||60;TS.stop=()=>clearInterval(TS.iv)},
+ init(c,o){S.qz=S.qz||{};const q=S.qz[S.cur]||{n:0,res:[]};TS.o=o;TS.QX=o.set==='ef'?QSEF:QS;TS.uk=o.set==='ef'?'usedQE':'usedQ';S[TS.uk]=S[TS.uk]||[];TS.order=S.teams.map(t=>t.k);TS.per=o.per||3;TS.total=TS.order.length*TS.per;TS.n=q.n;TS.res=q.res;TS.st='idle';TS.secs=o.secs||60;TS.stop=()=>clearInterval(TS.iv)},
  draw(){
   if(TS.n>=TS.total){
    return `<div class="mid">🏁 ¡Todos los equipos han respondido sus ${TS.per} preguntas!</div><table class="t"><thead><tr><th style="text-align:left">Equipo</th><th>Aciertos</th></tr></thead><tbody>${TS.order.map(k=>{const a=TS.res.filter(r=>r.k===k&&r.ok).length;return `<tr><td class="l"><div class="tn">${crest(k,40)}<b>${TEAMBY[k].n}</b></div></td><td class="pt">${a} / ${TS.per}</td></tr>`}).join('')}</tbody></table><div class="row center">${bigBtn('qzFin',null,'🏁 Ir a la clasificación →','pri big')}</div>`;
   }
-  const k=TS.order[TS.n%TS.order.length],T=TEAMBY[k],round=Math.floor(TS.n/TS.order.length)+1,q=TS.q!=null&&TS.st!=='idle'?QS[TS.q]:null;
+  const k=TS.order[TS.n%TS.order.length],T=TEAMBY[k],round=Math.floor(TS.n/TS.order.length)+1,q=TS.q!=null&&TS.st!=='idle'?TS.QX[TS.q]:null;
   const head=`<div class="row" style="align-items:center;gap:1rem">${crest(k,80)}<div class="sp"><div class="disp" style="font-size:2.3rem;color:${T.c};filter:brightness(1.5)">${T.n}</div><div class="lead" style="font-size:1.2rem">Pregunta ${round} de ${TS.per} · pregunta nº ${TS.n+1} de ${TS.total}</div></div>${q?`<div class="clock" id="qzT" style="font-size:4.6rem">${TS.left}</div>`:''}</div>
   <div class="row" style="gap:.3rem;margin:.3rem 0">${TS.order.map(x=>`<span class="tn card" style="padding:.1rem .5rem">${crest(x,26)}<b>${TS.res.filter(r=>r.k===x&&r.ok).length}/${TS.res.filter(r=>r.k===x).length}</b></span>`).join('')}</div>`;
   if(!q)return head+`<div class="cmdbox" style="background:rgba(255,255,255,.1);min-height:10rem"><div class="t" style="font-size:2.2rem">Turno de ${esc(T.n)}: ${fmt(TS.secs)} para responder</div></div><div class="row center" style="margin-top:.6rem">${bigBtn('qzStart',null,'▶ Iniciar pregunta','pri big')}</div>`;
@@ -1677,9 +1817,9 @@ TL.quiz={
 };
 ACT.qzStart=()=>{
  const round=Math.floor(TS.n/TS.order.length)+1;
- let pool=QS.map((_,i)=>i).filter(i=>!S.usedQ.includes(i)&&QS[i][5]<=Math.min(3,round+1));
- if(!pool.length){S.usedQ=[];pool=QS.map((_,i)=>i)}
- TS.q=pool[rnd(pool.length)];S.usedQ.push(TS.q);const q=QS[TS.q];
+ const Q=TS.QX,U=S[TS.uk];let pool=Q.map((_,i)=>i).filter(i=>!U.includes(i)&&Q[i][5]<=Math.min(3,round+1));
+ if(!pool.length){S[TS.uk]=[];pool=Q.map((_,i)=>i)}
+ TS.q=pool[rnd(pool.length)];S[TS.uk].push(TS.q);const q=Q[TS.q];
  TS.opts=shuffle([{t:q[1],ok:true},{t:q[2]},{t:q[3]},{t:q[4]}]);TS.sel=null;TS.left=TS.secs;TS.st='run';
  clearInterval(TS.iv);TS.iv=setInterval(()=>{TS.left--;const e=$('#qzT');if(e)e.textContent=TS.left;if(TS.left<=5&&TS.left>0)SFX.tick();if(TS.left<=0){clearInterval(TS.iv);TS.st='out';TS.res.push({k:TS.order[TS.n%TS.order.length],ok:false});SFX.end();qzSave();drawTool()}},1000);
  SFX.go();drawTool();
@@ -1989,7 +2129,7 @@ SCR.standings=()=>{
  return `<div class="scr"><div class="pageh"><h1 class="disp">🏆 Clasificación general</h1><span class="lead">${doneCount()} de ${S.plan.length} pruebas</span></div>
  <div class="grid" style="grid-template-columns:1.3fr 1fr;gap:1rem"><div>${stTable(G)}</div><div>${last}
  <div class="card" style="margin-top:.7rem"><h3>🛠️ Ajustes del profe</h3><div class="row"><button class="btn sm" data-a="adjModal">➕ Ajustar puntos</button>${S.plan.map((p,i)=>S.res[i]&&!S.res[i].skip?`<button class="btn sm" data-a="rkEdit" data-v="${i}" title="Corregir clasificación">✏️ ${i+1}. ${esc(CHB[p.id].n)}</button>`:'').join('')}</div></div>
- <div class="card" style="margin-top:.7rem"><h3>🧘 Pausa activa</h3><div class="row"><button class="btn sm" data-a="warm">🔥 Calentamiento (2 min)</button><button class="btn sm" data-a="calm">🌬️ Respiramos (1 min)</button></div></div></div></div>
+ <div class="card" style="margin-top:.7rem;border-color:var(--c)"><h3>🧘 ¿La clase está muy emocionada?</h3><p class="small" style="margin:.2rem 0 .5rem">Antes de seguir, una pausa para recuperar el control:</p><div class="row"><button class="btn" data-a="calm">🌬️ Respiración para calmar</button><button class="btn" data-a="warm">🤸 Descanso activo</button></div></div></div></div>
  <div class="row" style="margin-top:.8rem">${S.plan.length&&r?`<button class="btn" data-a="stBack" data-back>✏️ Corregir esta clasificación</button>`:''}<div class="sp"></div>${next<0?`<button class="btn pri big" data-a="toCer" data-primary>🏆 ¡A LA CEREMONIA DE PREMIOS!</button>`:`<button class="btn pri big" data-a="stNext" data-primary>${nextC.fin?'🔥 ¡AL GRAN RETO FINAL!':'Siguiente prueba →'}</button>`}</div></div>`;
 };
 ACT.stBack=()=>{const i=S.cur;if(S.res[i]&&!S.res[i].skip){S.editing=i;RK.idx=-1;go('rank')}else go('intro')};
@@ -2000,13 +2140,47 @@ ACT.adjModal=()=>modal(`<h2>➕ Ajustar puntos de los equipos</h2><p class="lead
 ACT.adj=v=>{const [k,n]=v.split(':');S.adj[k]=(S.adj[k]||0)+(+n);save();const e=$('#adj-'+k);if(e)e.textContent=S.adj[k]};
 ACT.adjDone=()=>{closeModal();render()};
 
-/* --- calentamiento y respiración --- */
-const WARM=[['Marcha en el sitio','moves'],['Giros de hombros y brazos','conductor'],['Rodilla-codo cruzado','cross'],['Sentadillas suaves','squat'],['Equilibrio a un pie','balance'],['Baile libre','dance']];
-ACT.warm=()=>{
- let i=0,left=20;const draw=()=>{const w=WARM[i];modal(`<h2>🔥 Calentamiento · ${i+1}/${WARM.length}</h2><div class="grid g2"><div>${animSVG(w[1])}</div><div><div class="bigtext">${w[0]}</div><div class="clock" id="wc" style="font-size:6rem">${left}</div></div></div><div class="row"><button class="btn pri" data-a="close">Terminar</button></div>`);};
- draw();clearInterval(TS.wi);TS.wi=setInterval(()=>{if(!MODAL){clearInterval(TS.wi);return}left--;const e=$('#wc');if(e)e.textContent=left;if(left<=0){i++;left=20;if(i>=WARM.length){clearInterval(TS.wi);closeModal();SFX.ok();return}SFX.pop();draw()}},1000);
+/* --- pausas: respiración para calmar y descanso activo --- */
+const PAUSAS={
+ resp:[
+  {n:'El globo',e:'🎈',d:'Hinchamos un globo y lo soltamos despacio',cyc:5,st:[['in','Inhala por la nariz… ¡el globo se hincha!',4],['hold','Sostén el aire un momento',2],['out','Suelta el aire por la boca, despacito',6]]},
+  {n:'Respiración cuadrada',e:'🟦',d:'Cuatro tiempos iguales, como los lados de un cuadrado',cyc:4,st:[['in','Inhala contando hasta 4',4],['hold','Aguanta contando hasta 4',4],['out','Exhala contando hasta 4',4],['hold','Espera contando hasta 4',4]]},
+  {n:'La abeja',e:'🐝',d:'Soltamos el aire haciendo un zumbido suave',cyc:5,st:[['in','Inhala por la nariz',4],['out','Exhala haciendo "mmmmm" como una abeja',6]]},
+  {n:'Soplar la vela',e:'🕯️',d:'Soplamos sin apagar la llama',cyc:5,st:[['in','Huele la vela: inhala por la nariz',3],['out','Sopla muy suave para que la llama se mueva, pero no se apague',5]]}
+ ],
+ act:[
+  {n:'La jirafa y el gato',e:'🦒',d:'Estiramientos suaves en tres posturas',cyc:2,st:[['Estira los brazos arriba como una jirafa',10,'conductor'],['Dobla el cuerpo despacio y toca los pies',10,'squat'],['Espalda redonda como un gato enfadado',10,'moves']]},
+  {n:'Robot y muñeco de trapo',e:'🤖',d:'Tensamos todo el cuerpo y luego lo soltamos',cyc:4,st:[['¡ROBOT! Tensa todo el cuerpo, bien duro',5,'statue'],['¡MUÑECO DE TRAPO! Suelta todo, flojito, flojito…',8,'dance']]},
+  {n:'Yoga de animales',e:'🧘',d:'Posturas tranquilas de equilibrio y estiramiento',cyc:1,st:[['El árbol: sobre un pie, manos arriba',12,'balance'],['La montaña: de pie, brazos arriba y respira',10,'conductor'],['La tortuga: encoge el cuerpo, sentado',12,'squat'],['El águila: brazos cruzados y equilibrio',12,'balance']]},
+  {n:'Cámara lenta',e:'🐢',d:'Movernos muy despacio para recuperar el control',cyc:2,st:[['Camina como en cámara lenta',12,'carry'],['Estírate muy despacio',12,'conductor'],['Gira el cuello y los hombros con suavidad',12,'cross']]}
+ ]
 };
-ACT.calm=()=>{modal(`<h2>🌬️ Respiramos juntos</h2><p class="lead">Coge aire por la nariz mientras crece… sostén un momento… y suelta despacio por la boca mientras se encoge.</p><div class="breathe">🫁</div><div class="row"><button class="btn pri" data-a="close">Listo</button></div>`)};
+let PZ={iv:null};
+ACT.pausa=kind=>{
+ const L=PAUSAS[kind],t=kind==='resp'?'🌬️ Respiración para calmar':'🤸 Descanso activo';
+ modal(`<h2>${t}</h2><p class="lead">Elige una actividad. Dura 1-2 minutos y es perfecta si la clase está muy emocionada.</p><div class="grid g2">${L.map((p,i)=>`<button class="opt" data-a="pausaGo" data-v="${kind}:${i}"><div class="big">${p.e}</div><h3>${p.n}</h3><p>${p.d}</p></button>`).join('')}</div><div class="row" style="margin-top:.8rem"><button class="btn" data-a="pausaGo" data-v="${kind}:r">🎲 Una al azar</button><div class="sp"></div><button class="btn pri" data-a="close">Cerrar</button></div>`);
+};
+ACT.pausaGo=v=>{
+ const [kind,ix]=v.split(':'),L=PAUSAS[kind],i=ix==='r'?rnd(L.length):+ix,P=L[i],resp=kind==='resp';
+ const steps=[];for(let c=0;c<(P.cyc||1);c++)P.st.forEach(s=>steps.push(s));
+ const dur=s=>resp?s[2]:s[1],txt=s=>resp?s[1]:s[0];
+ const tot=steps.reduce((a,s)=>a+dur(s),0);let si=0,left=0,el=0;
+ modal(`<h2>${P.e} ${P.n}</h2><div class="center">${resp?`<div id="pzOrb" style="width:16rem;height:16rem;border-radius:50%;margin:1.2rem auto;background:radial-gradient(circle,#8fe3ff,#2563eb);transform:scale(.6);display:grid;place-items:center;font-size:3rem">${P.e}</div>`:`<div id="pzVis" style="max-width:34rem;margin:.5rem auto"></div>`}<div class="bigtext" id="pzTxt" style="font-size:2.4rem;min-height:5.5rem"></div><div class="clock" id="pzN" style="font-size:5rem">0</div><div class="tbar" style="margin:.5rem 0"><i id="pzP" style="width:0%"></i></div><div class="small" id="pzS"></div></div><div class="row center" style="margin-top:.5rem"><button class="btn pri" data-a="close">Terminar</button></div>`);
+ const setStep=()=>{
+  const s=steps[si];left=dur(s);$('#pzTxt').textContent=txt(s);$('#pzN').textContent=left;$('#pzS').textContent=`Paso ${si+1} de ${steps.length}`;
+  if(resp){const o=$('#pzOrb');o.style.transition=`transform ${s[0]==='hold'?.2:left}s ease-in-out`;if(s[0]==='in')o.style.transform='scale(1.3)';else if(s[0]==='out')o.style.transform='scale(.6)';tone(s[0]==='in'?392:s[0]==='out'?262:330,.4,'sine',.18)}
+  else{$('#pzVis').innerHTML=animSVG(s[2]);applyAnimState();tone(440+si%3*90,.3,'sine',.18)}
+ };
+ clearInterval(PZ.iv);window.onModalClose=()=>clearInterval(PZ.iv);
+ setStep();
+ PZ.iv=setInterval(()=>{
+  if(!MODAL){clearInterval(PZ.iv);return}
+  left--;el++;const n=$('#pzN'),pr=$('#pzP');if(n)n.textContent=Math.max(0,left);if(pr)pr.style.width=(el/tot*100)+'%';
+  if(left<=0){si++;if(si>=steps.length){clearInterval(PZ.iv);SFX.ok();$('#pzTxt').textContent='¡Muy bien! Ya estamos más tranquilos 🌟';$('#pzN').textContent='✔';$('#pzS').textContent='';return}setStep()}
+ },1000);
+};
+ACT.warm=()=>ACT.pausa('act');
+ACT.calm=()=>ACT.pausa('resp');
 
 /* ============ CEREMONIA ============ */
 let CER={k:0};

@@ -930,6 +930,19 @@ CH.push(Object.assign({m:'f',mat:[],incs:[1],v:''},{id:'trivialef',n:'Trivial de
  p:'Gana el equipo con más aciertos (3 preguntas por equipo).',e:'Dar pistas o eliminar una opción.',a:'Responder con tarjetas A, B, C, D.',s:'Sin riesgo.',v:'Se pueden comentar las respuestas para repasar los contenidos.',
  tool:{k:'quiz',secs:60,per:3,set:'ef'}}));
 
+/* ---- Ascenso al Teide y retos de secuencias: un turno por equipo ---- */
+OV('teide',{tm:'rt',tml:'Un turno por equipo · ascenso de 1:35',
+ w:'Cada equipo sube el Teide en el sitio, tramo a tramo, mientras el resto lo anima y el profe puntúa.',
+ h:['Cada equipo hace su ascenso en su turno (aparece en pantalla). Los demás miran y animan en silencio.','La pantalla marca cada tramo con su ejercicio suave y su tiempo: sendero, pinar, escalada de lava, viento fuerte y cima.','El profe-árbitro suma 1 por cada tramo bien hecho por todo el equipo, 2 por llegar a la cima entre todos y resta 1 si alguien abandona un tramo.'],
+ p:'Gana el equipo con más puntos. Al terminar los turnos aparece el equipo ganador.',
+ tool:{k:'rounds',mode:'steps',secs:95,steps:[{t:'Tramo 1 · Sendero',d:'Marcha tranquila en el sitio',s:30,a:'carry'},{t:'Tramo 2 · Pinar',d:'Rodillas altas suaves',s:20,a:'cross'},{t:'Tramo 3 · Escalada de lava',d:'Manos como si escalaras una pared',s:20,a:'moves'},{t:'Tramo 4 · Viento fuerte',d:'Equilibrio sobre un pie',s:15,a:'balance'},{t:'Cima · ¡Teide!',d:'Brazos arriba y respiración profunda',s:10,a:'conductor'}],
+  pos:[['Tramo bien hecho por todo el equipo',1],['¡Cima conseguida entre todos!',2]],neg:[['Alguien abandonó el tramo',-1]]},incs:[1,2]});
+const SEQP=[['palmas','claps','Un turno por equipo · 3 ritmos cada uno',3,'Ritmo','palmadas, golpes en las piernas, chasquidos y pisadas'],['sechumana','moves','Un turno por equipo · 3 secuencias cada uno',3,'Secuencia','movimientos con el cuerpo'],['zfMemoria','moves','Un turno por equipo · hasta donde lleguen',4,'Secuencia','movimientos con el cuerpo']];
+SEQP.forEach(([id,pool,tml,len,w,what])=>{const c=CH.find(x=>x.id===id);c.tm='rt';c.tml=tml;
+ c.h=['Cada equipo juega su turno, uno detrás de otro (aparece en pantalla); los demás observan en silencio.','La pantalla muestra una secuencia de '+what+'. Cuando termina, el equipo la repite entera y en el mismo orden. Cada vez es más larga.','El profe-árbitro anota después los puntos del equipo: ritmo perfecto o con un fallo. Al terminar todos los equipos se ve quién ha ganado.'];
+ c.p=id==='zfMemoria'?'Cada ronda superada suma 1 punto y a partir de 5 movimientos, 2. Gana el equipo con más puntos.':'Gana el equipo con más puntos entre todos sus turnos.';
+ c.tool={k:'rounds',mode:'seq',pool,len,secs:0,pos:id==='zfMemoria'?[['Ronda superada',1],['Ronda larga (5 o más)',2]]:[[w+' perfecto',2],[w+' con un fallo',1]],neg:[]};c.incs=[1,2]});
+
 /* ============ MÁS PREGUNTAS DE TRIVIAL DEPORTIVO ============ */
 QS.push(
 ['¿Cuántos puntos vale un tiro libre en baloncesto?','1','2','3','0',1,'Reglas'],
@@ -1999,7 +2012,7 @@ function musStop(){clearInterval(MUS.iv);MUS.iv=null}
 TL.rounds={
  init(c,o){
   S.rt=S.rt||{};const done=S.rt[S.cur]||{};
-  TS.o=o;TS.nt=o.secs===0;TS.secs=TS.nt?0:(o.secs||60);TS.order=S.teams.map(t=>t.k);TS.i=Math.max(0,TS.order.findIndex(k=>!done[k]));
+  TS.o=o;TS.nt=o.secs===0;TS.secs=TS.nt?0:(o.secs||60);if(o.steps){TS.bnd=[];let a=0;o.steps.forEach(s=>{a+=s.s;TS.bnd.push(a)});TS.secs=a}TS.order=S.teams.map(t=>t.k);TS.i=Math.max(0,TS.order.findIndex(k=>!done[k]));
   TS.st=TS.order.every(k=>done[k])?'done':'idle';TS.log={};TS.el=0;TS.last=null;
   TS.stop=()=>{clearInterval(TS.iv);musStop();clearTimeout(TS.cdt);if(BG.hold)bgHold(false)};TS.onEnd=null;
  },
@@ -2028,6 +2041,8 @@ function rtBox(){
  const o=TS.o,k=TS.order[TS.i];
  if(TS.st==='idle')return `<div class="cmdbox" style="background:rgba(255,255,255,.1);min-height:9rem"><div class="e">${o.mode==='statue'?'🎶':o.mode==='cards'?'🃏':o.mode==='plain'?'🎯':'🎬'}</div><div class="t" style="font-size:2.2rem">${TS.nt?'Turno de '+TEAMBY[k].n+': '+esc(curC().att||'sus intentos'):'Preparaos: '+fmt(TS.secs)+' para '+TEAMBY[k].n}</div></div>`;
  if(TS.st==='done')return `<div class="cmdbox" style="background:linear-gradient(135deg,#16a34a,#065f46);min-height:11rem"><div class="e">🏁</div><div class="t" style="font-size:2.4rem">¡Turno terminado!</div></div>`;
+ if(o.mode==='steps'){const s=o.steps[TS.si||0];return `<div class="cmdbox" style="background:linear-gradient(135deg,#7a4a2a,#3b2a1a);min-height:9rem;flex-direction:row;gap:1.2rem;text-align:left"><div style="width:15rem;flex:none">${animSVG(s.a)}</div><div><div class="small">Tramo ${(TS.si||0)+1} de ${o.steps.length}</div><div class="t" style="font-size:2rem">${esc(s.t)}</div><div class="lead" style="font-size:1.3rem">${esc(s.d)}</div><div class="clock" id="rtSt" style="font-size:3rem">${Math.max(0,Math.ceil(TS.bnd[TS.si||0]-TS.el))}</div></div></div>`}
+ if(o.mode==='seq')return rsBox();
  if(o.mode==='plain')return `<div class="cmdbox" style="background:linear-gradient(135deg,#2563eb,#1e3a8a);min-height:9rem"><div class="e">🎯</div><div class="t" style="font-size:2rem">¡Turno de ${esc(TEAMBY[k].n)} en marcha!</div><div class="small">${esc(curC().att||'')} · anota cada resultado con los botones de la derecha</div></div>`;
  if(o.mode==='statue'){
   if(TS.ph==='freeze')return `<div class="cmdbox" style="background:linear-gradient(135deg,#0ea5e9,#1e3a8a);min-height:9rem"><div class="e">🧊</div><div class="t">¡ESTATUA de ${esc(TS.fr.name)}!</div><div class="clock" id="rtFz" style="font-size:4rem">${Math.max(0,Math.ceil(TS.fr.e-TS.el))}</div></div>`;
@@ -2050,8 +2065,9 @@ function rtPlan(){ // calcula las estatuas del turno
 }
 function rtNewCmd(){const L=LISTS[TS.o.list];let i;do{i=rnd(L.length)}while(L.length>1&&i===TS.lastI);TS.lastI=i;TS.cur=L[i];TS.n=(TS.n||0)+1;const k=TS.cur[2];k==='x'?SFX.bad():tone(440+(i%6)*80,.18,'triangle',.22);}
 ACT.rtStart=()=>{
- if(TS.st!=='idle')return;const o=TS.o;if(TS.nt){TS.st='run';TS.el=0;drawTool();SFX.go();return}
- if(o.mode==='statue')bgHold(true);TS.el=0;TS.last=null;TS.n=0;TS.f=1;TS.ph='music';TS.fr=null;TS.cur=null;TS.nextAt=0;TS.hid=!!o.hide;TS.card=null;
+ if(TS.st!=='idle')return;const o=TS.o;if(o.mode==='seq'){TS.P=POOLS[o.pool];TS.q={seq:[],st:'idle',i:-1,len:o.len||3,sp:900}}
+ if(TS.nt){TS.st='run';TS.el=0;drawTool();SFX.go();return}
+ if(o.mode==='statue')bgHold(true);TS.el=0;TS.last=null;TS.n=0;TS.si=0;TS.f=1;TS.ph='music';TS.fr=null;TS.cur=null;TS.nextAt=0;TS.hid=!!o.hide;TS.card=null;
  if(o.mode==='statue')rtPlan();
  if(o.mode==='cards'){TS.bag=shuffle(DECKS[o.deck].map((_,i)=>i));TS.card=DECKS[o.deck][TS.bag.pop()]}
  TS.st='cd';cdown(3,false,()=>{TS.st='run';TS.last=Date.now();if(o.mode==='statue')musStart();if(o.mode==='cmd'){rtNewCmd();TS.nextAt=(o.auto||4)}clearInterval(TS.iv);TS.iv=setInterval(rtTick,200);drawTool()});
@@ -2065,12 +2081,27 @@ function rtTick(){
   else if(!f&&TS.ph==='freeze'){TS.ph='music';musStart();SFX.go();rtRedrawBox()}
   const fz=$('#rtFz');if(fz&&TS.fr)fz.textContent=Math.max(0,Math.ceil(TS.fr.e-TS.el));
  }
+ if(o.mode==='steps'){let ix=TS.bnd.findIndex(b=>TS.el<b);if(ix<0)ix=TS.bnd.length-1;if(ix!==TS.si){TS.si=ix;tone(520+ix*60,.3,'triangle',.22);rtRedrawBox()}const e=$('#rtSt');if(e)e.textContent=Math.max(0,Math.ceil(TS.bnd[TS.si]-TS.el))}
  if(o.mode==='cmd'&&TS.el>=TS.nextAt){rtNewCmd();TS.nextAt=TS.el+(o.auto||4)*(o.speed?TS.f:1);if(o.speed)TS.f=Math.max(.4,TS.f*.93);rtRedrawBox()}
  if(TS.el>=TS.secs)rtFinish();
 }
 function rtFinish(){
- clearInterval(TS.iv);musStop();TS.st='done';SFX.end();if(BG.hold)bgHold(false);S.rt=S.rt||{};(S.rt[S.cur]=S.rt[S.cur]||{})[TS.order[TS.i]]=true;save();renderTally();drawTool();
+ clearTimeout(TS.to);clearInterval(TS.iv);musStop();TS.st='done';SFX.end();if(BG.hold)bgHold(false);S.rt=S.rt||{};(S.rt[S.cur]=S.rt[S.cur]||{})[TS.order[TS.i]]=true;save();renderTally();drawTool();
 }
+/* secuencias dentro de un turno de equipo */
+function rsBox(){
+ const q=TS.q,P=TS.P;if(!q)return '';
+ const main=q.st==='show'?`<div class="center" style="font-size:7rem;line-height:1.1;min-height:8rem">${q.i>=0?P[q.seq[q.i]].i:''}</div><div class="mid">${q.i>=0&&P[q.seq[q.i]].t?P[q.seq[q.i]].t:''}</div>`
+  :q.st==='hid'?`<div class="seqrow" style="margin:.6rem 0">${q.seq.map(()=>'<div class="seqit">?</div>').join('')}</div><div class="mid">🙈 ¡El equipo la repite en el mismo orden!</div>`
+  :q.st==='sol'?`<div class="seqrow" style="margin:.6rem 0">${q.seq.map(s=>`<div class="seqit">${P[s].i}</div>`).join('')}</div>`
+  :`<div class="mid" style="padding:1rem 0">Longitud de la secuencia: <b style="color:var(--y)">${q.len}</b><br><span class="lead" style="font-size:1.2rem">Pulsa «Nueva secuencia»: el equipo mira con atención.</span></div>`;
+ return `<div class="cmdbox" style="background:rgba(255,255,255,.1);min-height:9rem">${main}</div><div class="row center" style="margin-top:.4rem"><button class="btn sm" data-a="rsLen" data-v="-1">− 1</button><b class="mid" style="font-size:1.6rem">${q.len}</b><button class="btn sm" data-a="rsLen" data-v="1">+ 1</button>${bigBtn('rsNew',null,'▶ Nueva secuencia','pri')}${q.seq.length?bigBtn('rsAgain',null,'🔁 Repetir'):''}${q.seq.length?bigBtn('rsSol',null,'✅ Ver solución'):''}</div>`;
+}
+function rsPlay(){const q=TS.q;clearTimeout(TS.to);q.st='show';q.i=-1;rtRedrawBox();let i=0;const step=()=>{if(i>=q.seq.length){q.st='hid';rtRedrawBox();return}q.i=-1;rtRedrawBox();TS.to=setTimeout(()=>{q.i=i;const it=TS.P[q.seq[i]];tone(it.f||330+i*40,.25,'triangle',.25);rtRedrawBox();i++;TS.to=setTimeout(step,q.sp)},120)};step()}
+ACT.rsLen=v=>{TS.q.len=clamp(TS.q.len+(+v),2,14);rtRedrawBox()};
+ACT.rsNew=()=>{const q=TS.q;q.seq=Array.from({length:q.len},()=>rnd(TS.P.length));for(let i=1;i<q.seq.length;i++)if(q.seq[i]===q.seq[i-1]&&TS.P.length>1)q.seq[i]=(q.seq[i]+1)%TS.P.length;rsPlay()};
+ACT.rsAgain=()=>rsPlay();
+ACT.rsSol=()=>{clearTimeout(TS.to);TS.q.st='sol';rtRedrawBox()};
 ACT.rtEnd=()=>{if(TS.st==='run'||TS.st==='pause')rtFinish()};
 ACT.rtMain=()=>{
  if(TS.st==='run'){TS.st='pause';musStop();drawTool()}

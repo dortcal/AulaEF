@@ -950,6 +950,13 @@ CH.push(Object.assign({m:'f',mat:[],incs:[1],v:''},{id:'pongbote',n:'Pong de Vas
  p:'Gana el equipo con más puntos cuando han lanzado todos los jugadores.',e:'Acerca la línea de lanzamiento o usa vasos grandes.',a:'Lanzar desde sentado o con la mano que prefiera.',s:'Sin líquidos ni vidrio. Pelotas muy ligeras. Mesa despejada.',v:'Variantes: dos botes (vale 4), lanzar con la mano no dominante.',
  tool:{k:'rounds',mode:'plain',secs:0,pos:[['Entra tras un bote',2],['Vaso de la punta tras un bote',3]],neg:[['Trampa o fallo de regla',-1]]}}));
 
+/* ---- Ritmo de Vasos: un turno por equipo ---- */
+OV('ritmovasos',{tm:'rt',tml:'Un turno por equipo · 3 patrones cada uno',
+ w:'Cada equipo repite con sus vasos los patrones de ritmo que muestra la pantalla.',
+ h:['Cada equipo juega su turno, uno detrás de otro (aparece en pantalla); los demás observan en silencio.','Cada jugador tiene un vaso. G = golpe al vaso, M = golpe a la mesa, P = palmada. El equipo repite el patrón 4 veces seguidas, al mismo tiempo.','El profe-árbitro puntúa cada patrón: perfecto (2) o con un fallo (1). Se pasa al siguiente patrón, más difícil. Al terminar todos los equipos se ve quién ha ganado.'],
+ p:'Gana el equipo con más puntos entre todos sus patrones.',
+ tool:{k:'rounds',mode:'lv',lv:'ritmovasos',secs:0,pos:[['Patrón perfecto',2],['Patrón con un fallo',1]],neg:[]},incs:[1,2]});
+
 /* ============ MÁS PREGUNTAS DE TRIVIAL DEPORTIVO ============ */
 QS.push(
 ['¿Cuántos puntos vale un tiro libre en baloncesto?','1','2','3','0',1,'Reglas'],
@@ -2051,6 +2058,7 @@ function rtBox(){
  if(TS.st==='done')return `<div class="cmdbox" style="background:linear-gradient(135deg,#16a34a,#065f46);min-height:11rem"><div class="e">🏁</div><div class="t" style="font-size:2.4rem">¡Turno terminado!</div></div>`;
  if(o.mode==='steps'){const s=o.steps[TS.si||0];return `<div class="cmdbox" style="background:linear-gradient(135deg,#7a4a2a,#3b2a1a);min-height:9rem;flex-direction:row;gap:1.2rem;text-align:left"><div style="width:15rem;flex:none">${animSVG(s.a)}</div><div><div class="small">Tramo ${(TS.si||0)+1} de ${o.steps.length}</div><div class="t" style="font-size:2rem">${esc(s.t)}</div><div class="lead" style="font-size:1.3rem">${esc(s.d)}</div><div class="clock" id="rtSt" style="font-size:3rem">${Math.max(0,Math.ceil(TS.bnd[TS.si||0]-TS.el))}</div></div></div>`}
  if(o.mode==='seq')return rsBox();
+ if(o.mode==='lv'){const L=LV[o.lv],l=L[TS.lvi||0];return `<div class="cmdbox" style="background:linear-gradient(135deg,#7c3aed,#312e81);min-height:9rem"><div class="small">Patrón ${(TS.lvi||0)+1} de ${L.length}</div><div class="t" style="font-size:2.2rem">${esc(l.t)}</div><div class="lead" style="font-size:1.3rem">${esc(l.d)}</div>${l.art?`<div class="art" style="font-size:2.6rem">${l.art.map(esc).join('\n')}</div>`:''}</div><div class="row center" style="margin-top:.4rem"><button class="btn sm" data-a="rlGo" data-v="-1">← Anterior</button><button class="btn sm pri" data-a="rlGo" data-v="1">Siguiente patrón →</button></div>`}
  if(o.mode==='plain')return `<div class="cmdbox" style="background:linear-gradient(135deg,#2563eb,#1e3a8a);min-height:9rem"><div class="e">🎯</div><div class="t" style="font-size:2rem">¡Turno de ${esc(TEAMBY[k].n)} en marcha!</div><div class="small">${esc(curC().att||'')} · anota cada resultado con los botones de la derecha</div></div>`;
  if(o.mode==='statue'){
   if(TS.ph==='freeze')return `<div class="cmdbox" style="background:linear-gradient(135deg,#0ea5e9,#1e3a8a);min-height:9rem"><div class="e">🧊</div><div class="t">¡ESTATUA de ${esc(TS.fr.name)}!</div><div class="clock" id="rtFz" style="font-size:4rem">${Math.max(0,Math.ceil(TS.fr.e-TS.el))}</div></div>`;
@@ -2073,7 +2081,8 @@ function rtPlan(){ // calcula las estatuas del turno
 }
 function rtNewCmd(){const L=LISTS[TS.o.list];let i;do{i=rnd(L.length)}while(L.length>1&&i===TS.lastI);TS.lastI=i;TS.cur=L[i];TS.n=(TS.n||0)+1;const k=TS.cur[2];k==='x'?SFX.bad():tone(440+(i%6)*80,.18,'triangle',.22);}
 ACT.rtStart=()=>{
- if(TS.st!=='idle')return;const o=TS.o;if(o.mode==='seq'){TS.P=POOLS[o.pool];TS.q={seq:[],st:'idle',i:-1,len:o.len||3,sp:900}}
+ if(TS.st!=='idle')return;const o=TS.o;if(o.mode==='lv')TS.lvi=0;
+ if(o.mode==='seq'){TS.P=POOLS[o.pool];TS.q={seq:[],st:'idle',i:-1,len:o.len||3,sp:900}}
  if(TS.nt){TS.st='run';TS.el=0;drawTool();SFX.go();return}
  if(o.mode==='statue')bgHold(true);TS.el=0;TS.last=null;TS.n=0;TS.si=0;TS.f=1;TS.ph='music';TS.fr=null;TS.cur=null;TS.nextAt=0;TS.hid=!!o.hide;TS.card=null;
  if(o.mode==='statue')rtPlan();
@@ -2106,6 +2115,7 @@ function rsBox(){
  return `<div class="cmdbox" style="background:rgba(255,255,255,.1);min-height:9rem">${main}</div><div class="row center" style="margin-top:.4rem"><button class="btn sm" data-a="rsLen" data-v="-1">− 1</button><b class="mid" style="font-size:1.6rem">${q.len}</b><button class="btn sm" data-a="rsLen" data-v="1">+ 1</button>${bigBtn('rsNew',null,'▶ Nueva secuencia','pri')}${q.seq.length?bigBtn('rsAgain',null,'🔁 Repetir'):''}${q.seq.length?bigBtn('rsSol',null,'✅ Ver solución'):''}</div>`;
 }
 function rsPlay(){const q=TS.q;clearTimeout(TS.to);q.st='show';q.i=-1;rtRedrawBox();let i=0;const step=()=>{if(i>=q.seq.length){q.st='hid';rtRedrawBox();return}q.i=-1;rtRedrawBox();TS.to=setTimeout(()=>{q.i=i;const it=TS.P[q.seq[i]];tone(it.f||330+i*40,.25,'triangle',.25);rtRedrawBox();i++;TS.to=setTimeout(step,q.sp)},120)};step()}
+ACT.rlGo=v=>{const n=LV[TS.o.lv].length;TS.lvi=clamp((TS.lvi||0)+(+v),0,n-1);SFX.pop();rtRedrawBox()};
 ACT.rsLen=v=>{TS.q.len=clamp(TS.q.len+(+v),2,14);rtRedrawBox()};
 ACT.rsNew=()=>{const q=TS.q;q.seq=Array.from({length:q.len},()=>rnd(TS.P.length));for(let i=1;i<q.seq.length;i++)if(q.seq[i]===q.seq[i-1]&&TS.P.length>1)q.seq[i]=(q.seq[i]+1)%TS.P.length;rsPlay()};
 ACT.rsAgain=()=>rsPlay();
